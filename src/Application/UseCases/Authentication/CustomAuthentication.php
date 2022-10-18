@@ -34,7 +34,7 @@ class CustomAuthentication implements AuthenticationService
 
         return [
             'accessToken' => $accessToken,
-            'email' => $user->getEmail()
+            'email' => strval($user->getEmail())
         ];
     }
 }

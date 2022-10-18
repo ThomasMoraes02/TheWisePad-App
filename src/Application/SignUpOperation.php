@@ -23,12 +23,13 @@ class SignUpOperation implements ControllerOperation
     {
         try {
             $response = $this->useCase->perform([
+                'name' => $request['name'],
                 'email' => $request['email'],
                 'password' => $request['password']
             ]);
     
             if($response['email'] == $request['email']) {
-                $this->created($response);
+                return $this->created($response);
             }
         } catch(UserNotFound $e) {
             return $this->forbidden($e);
