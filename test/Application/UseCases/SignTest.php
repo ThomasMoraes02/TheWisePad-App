@@ -43,8 +43,6 @@ class SignTest extends TestCase
 
         $response = $signUp->perform($request);
 
-        print_r($response);
-
         $this->assertEquals("thomas@gmail.com", $response['email']);
     }
 
