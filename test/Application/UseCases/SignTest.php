@@ -7,7 +7,7 @@ use TheWisePad\Application\UseCases\SignIn;
 use TheWisePad\Application\UseCases\SignUp;
 use TheWisePad\Domain\User\User;
 use TheWisePad\Infraestructure\PasswordArgonII;
-use TheWisePad\Infraestructure\TokenUniqId;
+use TheWisePad\Infraestructure\TokenJWT;
 use TheWisePad\Infraestructure\User\UserRepositoryMemory;
 
 class SignTest extends TestCase
@@ -28,7 +28,7 @@ class SignTest extends TestCase
         $this->user = User::create("Thomas", "thomas@gmail.com", new PasswordArgonII("123456"));
         $this->userRepository->addUser($this->user);
 
-        $this->authentication = new CustomAuthentication($this->userRepository, $this->encoder, new TokenUniqId);
+        $this->authentication = new CustomAuthentication($this->userRepository, $this->encoder, new TokenJWT);
     }
 
     public function test_sign_up()
@@ -42,6 +42,8 @@ class SignTest extends TestCase
         ];
 
         $response = $signUp->perform($request);
+
+        print_r($response);
 
         $this->assertEquals("thomas@gmail.com", $response['email']);
     }

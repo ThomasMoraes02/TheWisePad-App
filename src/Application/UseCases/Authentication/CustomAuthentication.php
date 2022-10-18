@@ -30,7 +30,7 @@ class CustomAuthentication implements AuthenticationService
             throw new DomainException("Invalid password");
         }
 
-        $accessToken = $this->tokenManager->sigIn();
+        $accessToken = $this->tokenManager->sigIn(['email' => strval($user->getEmail()), 'name' => $user->getName()]);
 
         return [
             'accessToken' => $accessToken,
