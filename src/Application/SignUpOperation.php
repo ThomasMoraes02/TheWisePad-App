@@ -5,6 +5,7 @@ use TheWisePad\Application\UseCases\UseCase;
 use TheWisePad\Application\Web\ControllerOperation;
 use TheWisePad\Application\Web\HttpHelper;
 use TheWisePad\Domain\Exceptions\UserNotFound;
+use Throwable;
 
 class SignUpOperation implements ControllerOperation
 {
@@ -31,7 +32,7 @@ class SignUpOperation implements ControllerOperation
             if($response['email'] == $request['email']) {
                 return $this->created($response);
             }
-        } catch(UserNotFound $e) {
+        } catch(Throwable $e) {
             return $this->forbidden($e);
         }
 
