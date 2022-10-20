@@ -4,6 +4,7 @@ namespace TheWisePad\Application\Web;
 use Error;
 use TheWisePad\Application\Web\HttpHelper;
 use TheWisePad\Application\Web\ControllerOperation;
+use Throwable;
 
 class WebController 
 {
@@ -19,28 +20,30 @@ class WebController
     public function handle($request)
     {
         try {
-            $missingParams = WebController::getMissingParams($request, $this->controllerOp['requiredParams']);
+            $missingParams = WebController::getMissingParams($request, $this->controllerOp->requiredParams);
 
             if(!empty($missingParams)) {
                 return $this->badRequest($missingParams);
             }
 
-            $this->controllerOp->specificOp($request);
+            return $this->controllerOp->specificOp($request);
 
-        } catch(Error $e) {
-            return $this->serverError($e);
+        } catch(Throwable $e) {
+            return $this->serverError($e->getMessage());
         }
     }
 
-    public static function getMissingParams($httpRequest, array $requiredParams)
+    public static function getMissingParams($request, $requiredParams)
     {
         $missingParams = [];
-        $missingParams = array_udiff($requiredParams, $httpRequest, function($a, $b) {
-            if($a != $b) {
-                return $a;
+    
+        for ($i=0; $i < count($requiredParams); $i++) { 
+            if(!in_array($requiredParams[$i], array_keys($request)) || empty($request[$requiredParams[$i]])) {
+                $missingParams[] = $requiredParams[$i];
             }
-        });
-        
+
+        }
+    
         return $missingParams;
     }
 }

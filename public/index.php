@@ -3,6 +3,7 @@
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Slim\Factory\AppFactory;
+use TheWisePad\Application\Factories\ControllerFactory;
 use TheWisePad\Application\Factories\makeSignUpController;
 use TheWisePad\Application\SignUpOperation;
 use TheWisePad\Application\UseCases\Authentication\CustomAuthentication;
@@ -22,19 +23,10 @@ $app->setBasePath('/projetos/thewisepad');
 $app->post('/signup', function (Request $request, Response $response, array $args) {
     $payload = $request->getParsedBody();
 
-    $userRepository = new UserRepositoryMemory();
-    $tokenManager = new TokenJWT();
-    $encoder = new PasswordArgonII();
+    $signUp = ControllerFactory::makeSignUpController();
+    $responseOperation = $signUp->handle($payload);
 
-    $authentication = new CustomAuthentication($userRepository, $encoder, $tokenManager);
-
-    $useCase = new SignUp($userRepository, $encoder, $authentication);
-
-    $signUp = new SignUpOperation($useCase);
-
-    $responseApi = $signUp->specificOp($payload);
-
-    $response->getBody()->write(json_encode($responseApi, JSON_PRETTY_PRINT));
+    $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
