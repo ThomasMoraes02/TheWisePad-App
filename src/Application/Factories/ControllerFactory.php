@@ -1,8 +1,11 @@
 <?php 
 namespace TheWisePad\Application\Factories;
 
+use TheWisePad\Application\CreateNoteOperation;
 use TheWisePad\Application\SignUpOperation;
 use TheWisePad\Application\UseCases\Authentication\CustomAuthentication;
+use TheWisePad\Application\UseCases\CreateNote;
+use TheWisePad\Application\UseCases\SignIn;
 use TheWisePad\Application\UseCases\SignUp;
 use TheWisePad\Application\Web\WebController;
 use TheWisePad\Infraestructure\Note\NoteRepositoryMemory;
@@ -42,6 +45,31 @@ class ControllerFactory
         $useCase = new SignUp($userRepository, $encoder, $authenticationService);
 
         $controller = new WebController(new SignUpOperation($useCase));
+
+        return $controller;
+    }
+
+    public static function makeSignInController()
+    {
+        $userRepository = self::makeUserRepository();
+        $encoder = self::makeEncoder();
+        $tokenManager = self::makeTokenManager();
+
+        $authenticationService = new CustomAuthentication($userRepository, $encoder, $tokenManager);
+        $useCase = new SignIn($authenticationService);
+
+        $controller = new WebController(new SignUpOperation($useCase));
+
+        return $controller;
+    }
+
+    public static function makeCreateNoteController()
+    {
+        $userRepository = self::makeUserRepository();
+        $noteRepository = self::makeNoteRepository();
+
+        $useCase = new CreateNote($noteRepository, $userRepository);
+        $controller = new WebController(new CreateNoteOperation($useCase));
 
         return $controller;
     }

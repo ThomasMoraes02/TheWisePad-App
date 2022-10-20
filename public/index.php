@@ -3,6 +3,7 @@
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 use TheWisePad\Application\Factories\ControllerFactory;
 use TheWisePad\Application\Factories\makeSignUpController;
 use TheWisePad\Application\SignUpOperation;
@@ -29,5 +30,34 @@ $app->post('/signup', function (Request $request, Response $response, array $arg
     $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->group('/', function(RouteCollectorProxy $group) {
+
+    $group->get('notes', function(Request $request, Response $response, array $args) {
+        $response->getBody()->write("Entrei aqui no get");
+        return $response->withHeader('Content-Type', 'application/json');    
+    });
+
+    $group->post('notes', function(Request $request, Response $response, array $args) {
+        $response->getBody()->write("Entrei aqui no post");
+        return $response->withHeader('Content-Type', 'application/json');    
+    });
+
+    $group->put('notes', function(Request $request, Response $response, array $args) {
+        $response->getBody()->write("Entrei aqui no put");
+        return $response->withHeader('Content-Type', 'application/json');    
+    });
+
+    $group->delete('notes', function(Request $request, Response $response, array $args) {
+        $response->getBody()->write("Entrei aqui no delete");
+        return $response->withHeader('Content-Type', 'application/json');    
+    });
+});
+
+// $app->map(['GET', 'POST'], '/notes', function(Request $request, Response $response, array $args) {
+
+//     $response->getBody()->write("Entrei aqui");
+//     return $response->withHeader('Content-Type', 'application/json');
+// });
 
 $app->run();
