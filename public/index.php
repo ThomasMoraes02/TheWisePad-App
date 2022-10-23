@@ -5,13 +5,6 @@ use Slim\Psr7\Response;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 use TheWisePad\Application\Factories\ControllerFactory;
-use TheWisePad\Application\Factories\makeSignUpController;
-use TheWisePad\Application\SignUpOperation;
-use TheWisePad\Application\UseCases\Authentication\CustomAuthentication;
-use TheWisePad\Application\UseCases\SignUp;
-use TheWisePad\Infraestructure\PasswordArgonII;
-use TheWisePad\Infraestructure\TokenJWT;
-use TheWisePad\Infraestructure\User\UserRepositoryMemory;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
@@ -28,7 +21,9 @@ $app->post('/signup', function (Request $request, Response $response, array $arg
     $responseOperation = $signUp->handle($payload);
 
     $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
-    return $response->withHeader('Content-Type', 'application/json');
+    return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus($responseOperation['statusCode']);
 });
 
 $app->group('/', function(RouteCollectorProxy $group) {
