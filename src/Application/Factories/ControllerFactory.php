@@ -9,20 +9,22 @@ use TheWisePad\Application\UseCases\SignIn;
 use TheWisePad\Application\UseCases\SignUp;
 use TheWisePad\Application\Web\WebController;
 use TheWisePad\Infraestructure\Note\NoteRepositoryMemory;
+use TheWisePad\Infraestructure\Note\NoteRepositoryPdo;
 use TheWisePad\Infraestructure\PasswordArgonII;
 use TheWisePad\Infraestructure\TokenJWT;
 use TheWisePad\Infraestructure\User\UserRepositoryMemory;
+use TheWisePad\Infraestructure\User\UserRepositoryPdo;
 
 class ControllerFactory
 {
     public static function makeUserRepository()
     {
-        return new UserRepositoryMemory();
+        return new UserRepositoryPdo();
     }
 
     public static function makeNoteRepository()
     {
-        return new NoteRepositoryMemory();
+        return new NoteRepositoryPdo();
     }
 
     public static function makeEncoder()

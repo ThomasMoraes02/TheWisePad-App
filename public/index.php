@@ -13,7 +13,7 @@ $app = AppFactory::create();
 $app->setBasePath('/projetos/thewisepad');
 
 // $app->addErrorMiddleware(true, true, true);
-
+ 
 $app->post('/signup', function (Request $request, Response $response, array $args) {
     $payload = $request->getParsedBody();
 
@@ -34,8 +34,16 @@ $app->group('/', function(RouteCollectorProxy $group) {
     });
 
     $group->post('notes', function(Request $request, Response $response, array $args) {
-        $response->getBody()->write("Entrei aqui no post");
-        return $response->withHeader('Content-Type', 'application/json');    
+        $payload = $request->getParsedBody();
+
+        $creteNote = ControllerFactory::makeCreateNoteController();
+        $responseOperation = $creteNote->handle($payload);
+
+        $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
+
+        return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus($responseOperation['statusCode']);
     });
 
     $group->put('notes', function(Request $request, Response $response, array $args) {

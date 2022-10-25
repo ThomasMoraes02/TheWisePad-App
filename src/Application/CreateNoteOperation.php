@@ -10,7 +10,7 @@ class CreateNoteOperation implements ControllerOperation
 {
     use HttpHelper;
 
-    private $requiredParams = ['title','content','email'];
+    public $requiredParams = ['title','content','email'];
 
     private $useCase;
 
