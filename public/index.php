@@ -10,7 +10,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 $app = AppFactory::create();
 
-$app->setBasePath('/projetos/thewisepad');
+$app->setBasePath(BASE_PATH);
 
 // $app->addErrorMiddleware(true, true, true);
  

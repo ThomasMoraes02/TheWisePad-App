@@ -14,6 +14,11 @@ class PasswordArgonII implements PasswordEncoded
         }
     }
 
+    public function setPasswordHash($hash)
+    {
+        $this->password = $hash;
+    }
+
     public function encoded(string $password): string
     {
         return password_hash($password, PASSWORD_ARGON2I);

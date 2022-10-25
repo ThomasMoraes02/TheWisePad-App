@@ -4,6 +4,7 @@ namespace TheWisePad\Infraestructure\User;
 use PDO;
 use TheWisePad\Application\Factories\ControllerFactory;
 use TheWisePad\Domain\Email;
+use TheWisePad\Domain\Exceptions\UserNotFound;
 use TheWisePad\Domain\User\User;
 use TheWisePad\Domain\User\UserRepository;
 use TheWisePad\Infraestructure\ConnectionPdo;
@@ -37,9 +38,15 @@ class UserRepositoryPdo implements UserRepository
 
         $user = current($user);
 
-        $encoder = ControllerFactory::makeEncoder();
+        if(empty($user)) {
+            throw new UserNotFound();
+        }
 
-        return User::create($user['name'], $user['email'], new $encoder($user['password']));
+        $encoderClass = ENCODER;
+        $encoder = new $encoderClass;
+        $encoder->setPasswordHash($user['password']);
+
+        return User::create($user['name'], $user['email'], $encoder);
     }
 
     public function findAll(): array
