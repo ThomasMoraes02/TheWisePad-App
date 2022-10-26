@@ -42,13 +42,15 @@ class NoteRepositoryPdo implements NoteRepository
         
         $note = current($note);
 
-        if(!empty($note)) {
-            $userRepository = USER_REPOSITORY;
-            $userRepository = new $userRepository();
-            $user = $userRepository->findByEmail(new Email($note['email']));
-
-            return new Note($user, $note['title'], $note['content']);   
+        if(empty($note)) {
+            throw new NoteNotFound("Not with id: $id not found.");
         }
+
+        $userRepository = USER_REPOSITORY;
+        $userRepository = new $userRepository();
+        $user = $userRepository->findByEmail(new Email($note['email']));
+        
+        return new Note($user, $note['title'], $note['content']);   
     }
 
     public function updateTitle(string $id, string $title): void

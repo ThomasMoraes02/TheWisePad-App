@@ -64,9 +64,15 @@ $app->group('/', function(RouteCollectorProxy $group) {
         return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
     });
 
-    $group->delete('notes', function(Request $request, Response $response, array $args) {
-        $response->getBody()->write("Entrei aqui no delete");
-        return $response->withHeader('Content-Type', 'application/json');    
+    $group->delete('notes/{id}', function(Request $request, Response $response, array $args) {
+        $payload['id'] = $args['id'];
+
+        $updateNote = ControllerFactory::makeRemoveNoteController();
+        $responseOperation = $updateNote->handle($payload);
+
+        $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
     });
 
 })->add(function(ServerRequestInterface $request, RequestHandlerInterface $handler) use ($app) {
