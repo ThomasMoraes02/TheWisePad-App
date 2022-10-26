@@ -38,6 +38,7 @@ class UpdateNoteTest extends TestCase
         ];
 
         $response = $updateNote->perform($request);
-        $this->assertEquals("New title note", $response->getTitle());
+        
+        $this->assertEquals("New title note", $response['title']);
     }
 }

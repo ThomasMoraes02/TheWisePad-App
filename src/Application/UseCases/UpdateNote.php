@@ -44,7 +44,7 @@ class UpdateNote implements UseCase
 
         return [
             'id' => $request['id'],
-            'title' =>$noteUpdated->getTitle(),
+            'title' => $noteUpdated->getTitle(),
             'content' =>$noteUpdated->getContent(),
         ];
     }
@@ -54,7 +54,8 @@ class UpdateNote implements UseCase
         $userNotes = $this->noteRepository->findAllNotesFrom($note->getUser()->getEmail());
 
         array_filter($userNotes, function($note) use ($new_title){
-            if($note['title'] == $new_title) {
+            $getTitle = (is_object($note)) ? $note->getTitle() : $note['title'];
+            if($getTitle == $new_title) {
                 throw new DomainException('Title already exists: ' . $note['title']);
             }
         });

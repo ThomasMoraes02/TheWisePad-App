@@ -16,7 +16,6 @@ class TokenJWT implements TokenManager
         $header = json_encode($header);
         $header = base64_encode($header);
 
-        // 5 dias
         $expirationTime = time() + 60 * 60 * 24 * JWT_EXPIRATION_TOKEN;
 
         $payload = [
@@ -29,7 +28,7 @@ class TokenJWT implements TokenManager
         $payload = json_encode($payload);
         $payload = base64_encode($payload);
 
-        $signature = hash_hmac('sha256',"$header.$payload",'token',true);
+        $signature = hash_hmac('sha256',"$header.$payload",JWT_SECRET_TOKEN,true);
         $signature = base64_encode($signature);
 
         return "$header.$payload.$signature";
@@ -37,7 +36,7 @@ class TokenJWT implements TokenManager
 
     public function verify(string $token): bool
     {
-        if(strpos($token, 'Bearer') == true) {
+        if(preg_match("/Bearer/", $token)) {
             $token = explode('Bearer ',$token)[1];
         }
         $part = explode(".",$token);
@@ -45,7 +44,7 @@ class TokenJWT implements TokenManager
         $payload = $part[1];
         $signature = $part[2];
 
-        $valid = hash_hmac('sha256',"$header.$payload","token",true);
+        $valid = hash_hmac('sha256',"$header.$payload",JWT_SECRET_TOKEN,true);
         $valid = base64_encode($valid);
 
         $payloadDecoded = $this->base64_decode_url($payload);
