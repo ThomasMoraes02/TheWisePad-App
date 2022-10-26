@@ -1,6 +1,7 @@
 <?php 
 namespace TheWisePad\Infraestructure;
 
+use DateTime;
 use TheWisePad\Application\UseCases\Authentication\TokenManager;
 
 class TokenJWT implements TokenManager
@@ -15,11 +16,11 @@ class TokenJWT implements TokenManager
         $header = json_encode($header);
         $header = base64_encode($header);
 
-        // 60 dias
-        $expirationTime = time() + 60 * 60 * 24 * 60;
+        // 5 dias
+        $expirationTime = time() + 60 * 60 * 24 * JWT_EXPIRATION_TOKEN;
 
         $payload = [
-            'iss' => 'token',
+            'iss' => JWT_SECRET_TOKEN,
             'exp' => $expirationTime,
             'name' => $payload['name'],
             'email' => $payload['email']
@@ -45,9 +46,21 @@ class TokenJWT implements TokenManager
         $valid = hash_hmac('sha256',"$header.$payload","token",true);
         $valid = base64_encode($valid);
 
-        if($signature != $valid) {
+        $payloadDecoded = $this->base64_decode_url($payload);
+        
+        $expiresToken = new DateTime(date('Y-m-d',$payloadDecoded->exp));
+        $now = new DateTime();
+
+        $interval = $expiresToken->diff($now);
+
+        if($signature != $valid && $payloadDecoded->iss != ENCODER && $interval->days > 5) {
             return false;
         }
         return true;
+    }
+
+    private function base64_decode_url($string)
+    {
+        return json_decode(base64_decode(str_replace(['-','_'], ['+','/'], $string)));
     }
 }
