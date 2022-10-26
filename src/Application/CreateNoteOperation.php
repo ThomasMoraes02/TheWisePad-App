@@ -30,7 +30,7 @@ class CreateNoteOperation implements ControllerOperation
 
             return $this->created($response);
         } catch(Throwable $e) {
-            return $this->forbidden($e);
+            return $this->forbidden($e->getMessage());
         }
 
         return $this->badRequest($request);

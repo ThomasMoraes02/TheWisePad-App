@@ -18,16 +18,20 @@ class NoteRepositoryPdo implements NoteRepository
         $this->pdo = $pdo->getConnection();
     }
 
-    public function addNote(Note $note): void
+    public function addNote(Note $note): Note
     {
-        $query = "INSERT INTO note VALUES (:title, :content: :user)";
+        $query = "INSERT INTO note VALUES (:title, :content, :email)";
         $stmt = $this->pdo->prepare($query);
 
         $stmt->bindParam(":title", $note->getTitle());
         $stmt->bindParam(":content", $note->getContent());
-        $stmt->bindParam(":user", $note->getUser());
+        $stmt->bindParam(":email", $note->getUser()->getEmail());
 
-        $stmt->execute();
+        $statusNote = $stmt->execute();
+
+        if($statusNote) {
+            return $note;
+        }
     }
 
     public function findById(string $id): Note
@@ -37,7 +41,7 @@ class NoteRepositoryPdo implements NoteRepository
         
         $note = current($note);
 
-        return new Note($note['user'], $note['title'], $note['content']);
+        return new Note(($note['user']), $note['title'], $note['content']);
     }
 
     public function updateTitle(string $id, string $title): void
@@ -66,16 +70,9 @@ class NoteRepositoryPdo implements NoteRepository
 
     public function findAllNotesFrom(Email $email): array
     {
-        $query = "SELECT * FROM note";
+        $query = "SELECT * FROM note WHERE email = '$email'";
         $notes = $this->pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
-        $allNotes = [];
-        foreach($notes as $note) {
-            if($note['user']->getEmail() == $email) {
-                $allNotes[] = $note;
-            }   
-        }
-
-        return $allNotes;
+        return $notes;
     }
 }

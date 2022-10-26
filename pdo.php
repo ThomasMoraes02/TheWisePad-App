@@ -22,11 +22,15 @@ $tableNote = "CREATE TABLE note (
     -- note_id INTEGER DEFAULT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR (255),
     content VARCHAR (255),
-    user VARCHAR (255)
+    email VARCHAR(255)
 )";
 
-// $pdo->exec($tableUser);
-// $pdo->exec($tableNote);
+$pdo->exec($tableUser);
+$pdo->exec($tableNote);
+
+// $query = "ALTER TABLE note ALTER COLUMN user JSON";
+
+// $pdo->exec($query);
 
 // $user = new User("Igor Moraes", new Email("igor@gmail.com"), new PasswordArgonII("654321"));
 

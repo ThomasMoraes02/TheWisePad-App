@@ -6,7 +6,7 @@ use TheWisePad\Domain\Note\Note;
 
 interface NoteRepository
 {
-    public function addNote(Note $note): void;
+    public function addNote(Note $note);
 
     public function findById(string $id): Note;
 

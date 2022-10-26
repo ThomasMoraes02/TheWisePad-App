@@ -19,21 +19,26 @@ class CreateNote implements UseCase
         $this->userRepository = $userRepository;
     }
 
-    public function perform(array $request): void
+    public function perform(array $request)
     {
         $user = $this->userRepository->findByEmail(new Email($request['email']));
         $newNote = new Note($user, $request['title'], $request['content']);
 
         $userNotes = $this->noteRepository->findAllNotesFrom($user->getEmail());
 
-        array_filter($userNotes, function($note) use ($newNote) {
-            if($newNote->getTitle() == $note->getTitle()) {
-                throw new DomainException("Note already exists: " . $note->getTitle());
-            }
-        });
+        if(!empty($userNotes)) {
+            array_filter($userNotes, function($note) use ($newNote) {
+
+                if($newNote->getTitle() == $note['title']) {
+                    throw new DomainException("Note already exists: " . $note['title']);
+                }
+            });
+        }
 
         $this->noteRepository->addNote($newNote);
-
-        return;
+        
+        return [
+            'Note created'
+        ];
     }
 }
