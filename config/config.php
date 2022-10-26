@@ -12,6 +12,8 @@ define("USER_REPOSITORY", "TheWisePad\Infraestructure\User\UserRepositoryPdo");
 define("NOTE_REPOSITORY", "TheWisePad\Infraestructure\Note\NoteRepositoryPdo");
 
 // Config Token Manager
+define("TOKEN_MANAGER", "TheWisePad\Infraestructure\TokenJWT");
+
 define("JWT_SECRET_TOKEN", "token-jwt-thewisedev");
 
 define("JWT_EXPIRATION_TOKEN", 1);
