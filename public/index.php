@@ -4,6 +4,8 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use TheWisePad\Application\Factories\ControllerFactory;
 
 require_once __DIR__ . "/../vendor/autoload.php";
@@ -12,17 +14,16 @@ $app = AppFactory::create();
 
 $app->setBasePath(BASE_PATH);
 
-$app->addRoutingMiddleware();
-
+// $app->addRoutingMiddleware();
 // $app->addErrorMiddleware(true, true, true);
- 
+
 $app->post('/signup', function (Request $request, Response $response, array $args) {
     $payload = $request->getParsedBody();
 
     $signUp = ControllerFactory::makeSignUpController();
     $responseOperation = $signUp->handle($payload);
 
-    $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
+    $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
     return $response
             ->withHeader('Content-Type', 'application/json')
             ->withStatus($responseOperation['statusCode']);
@@ -36,7 +37,7 @@ $app->group('/', function(RouteCollectorProxy $group) {
         $loadNotes = ControllerFactory::makeLoadNoteController();
         $responseOperation = $loadNotes->handle($payload);
 
-        $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
+        $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
         return $response
             ->withHeader('Content-Type', 'application/json')
             ->withStatus($responseOperation['statusCode']);
@@ -48,7 +49,7 @@ $app->group('/', function(RouteCollectorProxy $group) {
         $creteNote = ControllerFactory::makeCreateNoteController();
         $responseOperation = $creteNote->handle($payload);
 
-        $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
+        $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
 
         return $response
                 ->withHeader('Content-Type', 'application/json')
@@ -64,12 +65,22 @@ $app->group('/', function(RouteCollectorProxy $group) {
         $response->getBody()->write("Entrei aqui no delete");
         return $response->withHeader('Content-Type', 'application/json');    
     });
+
+})->add(function(ServerRequestInterface $request, RequestHandlerInterface $handler) use ($app) {
+    // Middleware
+    $response = $handler->handle($request);
+    $token = $request->getHeader("Authorization");
+
+    $middlewareAuth = ControllerFactory::makeAuthMiddleware();
+    $responseOperation = $middlewareAuth->handle($token[0]);
+
+    if($responseOperation['statusCode'] != 200) {
+        $response = $app->getResponseFactory()->createResponse();
+        $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
+    
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
+    }
+    return $response;
 });
-
-// $app->map(['GET', 'POST'], '/notes', function(Request $request, Response $response, array $args) {
-
-//     $response->getBody()->write("Entrei aqui");
-//     return $response->withHeader('Content-Type', 'application/json');
-// });
 
 $app->run();

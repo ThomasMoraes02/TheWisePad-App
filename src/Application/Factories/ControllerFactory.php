@@ -1,6 +1,7 @@
 <?php 
 namespace TheWisePad\Application\Factories;
 
+use TheWisePad\Application\Authentication\Authentication;
 use TheWisePad\Application\CreateNoteOperation;
 use TheWisePad\Application\LoadNoteOperation;
 use TheWisePad\Application\SignUpOperation;
@@ -86,5 +87,11 @@ class ControllerFactory
         $controller = new WebController(new LoadNoteOperation($useCase));
 
         return $controller;
+    }
+
+    public static function makeAuthMiddleware()
+    {
+        $middleware = new Authentication(self::makeTokenManager());
+        return $middleware;
     }
 }

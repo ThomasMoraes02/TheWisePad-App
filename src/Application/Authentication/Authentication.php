@@ -1,9 +1,9 @@
 <?php 
 namespace TheWisePad\Application\Authentication;
 
-use Error;
 use TheWisePad\Application\UseCases\Authentication\TokenManager;
 use TheWisePad\Application\Web\HttpHelper;
+use Throwable;
 
 class Authentication implements Middleware
 {
@@ -19,19 +19,19 @@ class Authentication implements Middleware
     public function handle($request)
     {
         try {
-            if(empty($request['accessToken']) || empty($request['id'])) {
-                return $this->forbidden(new Error('Invalid token or user id'));
+            if(empty($request)) {
+                return $this->forbidden('Invalid Token');
             }
 
-            $decodedToken = $this->tokenManager->verify($request['accessToken']);
+            $decodedToken = $this->tokenManager->verify($request);
 
             if($decodedToken == false) {
-                return $this->forbidden(false);
+                return $this->forbidden('Invalid Token');
             }
 
             return $this->ok(true);
-        } catch(Error $e) {
-            return $this->serverError($e);
+        } catch(Throwable $e) {
+            return $this->serverError('Invalid Token');
         }
     }
 }

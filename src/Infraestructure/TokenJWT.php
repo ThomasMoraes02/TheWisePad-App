@@ -36,6 +36,7 @@ class TokenJWT implements TokenManager
 
     public function verify(string $token): bool
     {
+        $token = explode('Bearer ',$token)[1];
         $part = explode(".",$token);
         $header = $part[0];
         $payload = $part[1];
