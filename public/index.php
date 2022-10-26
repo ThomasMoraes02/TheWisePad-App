@@ -14,7 +14,7 @@ $app = AppFactory::create();
 
 $app->setBasePath(BASE_PATH);
 
-// $app->addRoutingMiddleware();
+$app->addRoutingMiddleware();
 // $app->addErrorMiddleware(true, true, true);
 
 $app->post('/signup', function (Request $request, Response $response, array $args) {
@@ -24,9 +24,7 @@ $app->post('/signup', function (Request $request, Response $response, array $arg
     $responseOperation = $signUp->handle($payload);
 
     $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
-    return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus($responseOperation['statusCode']);
+    return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
 });
 
 $app->group('/', function(RouteCollectorProxy $group) {
@@ -38,9 +36,7 @@ $app->group('/', function(RouteCollectorProxy $group) {
         $responseOperation = $loadNotes->handle($payload);
 
         $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus($responseOperation['statusCode']);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
     });
 
     $group->post('notes', function(Request $request, Response $response, array $args) {
@@ -51,9 +47,7 @@ $app->group('/', function(RouteCollectorProxy $group) {
 
         $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
 
-        return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus($responseOperation['statusCode']);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
     });
 
     $group->put('notes', function(Request $request, Response $response, array $args) {

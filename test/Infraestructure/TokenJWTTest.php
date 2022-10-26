@@ -9,6 +9,8 @@ class TokenJWTTest extends TestCase
     public function test_json_web_token()
     {
         $payload = [
+            'iss' => JWT_SECRET_TOKEN,
+            'exp' => JWT_EXPIRATION_TOKEN,
             'name' => 'Thomas',
             'email' => 'thomas@gmail.com'
         ];
