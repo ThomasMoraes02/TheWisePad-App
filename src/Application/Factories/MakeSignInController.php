@@ -3,14 +3,12 @@ namespace TheWisePad\Application\Factories;
 
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
-use TheWisePad\Application\SignUpOperation;
-use TheWisePad\Application\UseCases\SignUp;
+use TheWisePad\Application\SignInOperation;
+use TheWisePad\Application\UseCases\SignIn;
 use TheWisePad\Application\Web\WebController;
-use TheWisePad\Application\Factories\HelperFactorie;
-use TheWisePad\Application\Factories\ControllerFactory;
 use TheWisePad\Application\UseCases\Authentication\CustomAuthentication;
 
-class MakeSignUp
+class MakeSignInController
 {
     use HelperFactorie;
 
@@ -23,9 +21,9 @@ class MakeSignUp
         $tokenManager = $this->getInstance(TOKEN_MANAGER);
 
         $authenticationService = new CustomAuthentication($userRepository, $encoder, $tokenManager);
-        $useCase = new SignUp($userRepository, $encoder, $authenticationService);
+        $useCase = new SignIn($authenticationService);
 
-        $this->controller = new WebController(new SignUpOperation($useCase));
+        $this->controller = new WebController(new SignInOperation($useCase));
     }
 
     public function __invoke(Request $request, Response $response, array $args)
