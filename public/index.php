@@ -12,6 +12,8 @@ $app = AppFactory::create();
 
 $app->setBasePath(BASE_PATH);
 
+$app->addRoutingMiddleware();
+
 // $app->addErrorMiddleware(true, true, true);
  
 $app->post('/signup', function (Request $request, Response $response, array $args) {
@@ -28,9 +30,16 @@ $app->post('/signup', function (Request $request, Response $response, array $arg
 
 $app->group('/', function(RouteCollectorProxy $group) {
 
-    $group->get('notes', function(Request $request, Response $response, array $args) {
-        $response->getBody()->write("Entrei aqui no get");
-        return $response->withHeader('Content-Type', 'application/json');    
+    $group->get('notes/{email}', function(Request $request, Response $response, array $args) {
+        $payload['email'] = $args['email'];
+
+        $loadNotes = ControllerFactory::makeLoadNoteController();
+        $responseOperation = $loadNotes->handle($payload);
+
+        $response->getBody()->write(json_encode($responseOperation, JSON_PRETTY_PRINT));
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus($responseOperation['statusCode']);
     });
 
     $group->post('notes', function(Request $request, Response $response, array $args) {

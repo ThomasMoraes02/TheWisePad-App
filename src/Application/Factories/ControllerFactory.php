@@ -2,9 +2,11 @@
 namespace TheWisePad\Application\Factories;
 
 use TheWisePad\Application\CreateNoteOperation;
+use TheWisePad\Application\LoadNoteOperation;
 use TheWisePad\Application\SignUpOperation;
 use TheWisePad\Application\UseCases\Authentication\CustomAuthentication;
 use TheWisePad\Application\UseCases\CreateNote;
+use TheWisePad\Application\UseCases\LoadNote;
 use TheWisePad\Application\UseCases\SignIn;
 use TheWisePad\Application\UseCases\SignUp;
 use TheWisePad\Application\Web\WebController;
@@ -72,6 +74,16 @@ class ControllerFactory
 
         $useCase = new CreateNote($noteRepository, $userRepository);
         $controller = new WebController(new CreateNoteOperation($useCase));
+
+        return $controller;
+    }
+
+    public static function makeLoadNoteController()
+    {
+        $noteRepository = self::makeNoteRepository();
+
+        $useCase = new LoadNote($noteRepository);
+        $controller = new WebController(new LoadNoteOperation($useCase));
 
         return $controller;
     }
