@@ -12,14 +12,14 @@ $pdo = new ConnectionPdo();
 $pdo = $pdo->getConnection();
 
 $tableUser = "CREATE TABLE user (
-    -- id INTEGER DEFAULT NULL AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255)
 )";
 
 $tableNote = "CREATE TABLE note (
-    -- note_id INTEGER DEFAULT NULL AUTO_INCREMENT PRIMARY KEY,
+    note_id INTEGER PRIMARY KEY AUTOINCREMENT,
     title VARCHAR (255),
     content VARCHAR (255),
     email VARCHAR(255)
@@ -28,13 +28,8 @@ $tableNote = "CREATE TABLE note (
 $pdo->exec($tableUser);
 $pdo->exec($tableNote);
 
-// $query = "ALTER TABLE note ALTER COLUMN user JSON";
-
-// $pdo->exec($query);
-
-// $user = new User("Igor Moraes", new Email("igor@gmail.com"), new PasswordArgonII("654321"));
-
-// $userRepositoryPdo = new UserRepositoryPdo();
-// $userRepositoryPdo->addUser($user);
+$user = new User("Thomas Moraes", new Email("thomas@gmail.com"), new PasswordArgonII("123456"));
+$userRepositoryPdo = new UserRepositoryPdo();
+$userRepositoryPdo->addUser($user);
 
 // print_r($user);

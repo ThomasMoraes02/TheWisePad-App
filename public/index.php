@@ -14,6 +14,8 @@ $app = AppFactory::create();
 
 $app->setBasePath(BASE_PATH);
 
+$app->addBodyParsingMiddleware();
+
 $app->addRoutingMiddleware();
 // $app->addErrorMiddleware(true, true, true);
 
@@ -50,9 +52,16 @@ $app->group('/', function(RouteCollectorProxy $group) {
         return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
     });
 
-    $group->put('notes', function(Request $request, Response $response, array $args) {
-        $response->getBody()->write("Entrei aqui no put");
-        return $response->withHeader('Content-Type', 'application/json');    
+    $group->put('notes/{id}', function(Request $request, Response $response, array $args) {
+        parse_str($request->getBody()->getContents(), $payload);
+        $payload['id'] = $args['id'];
+
+        $updateNote = ControllerFactory::makeUpdateNoteController();
+        $responseOperation = $updateNote->handle($payload);
+
+        $response->getBody()->write(json_encode($responseOperation['body'], JSON_PRETTY_PRINT));
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($responseOperation['statusCode']);
     });
 
     $group->delete('notes', function(Request $request, Response $response, array $args) {

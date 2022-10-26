@@ -42,7 +42,11 @@ class UpdateNote implements UseCase
 
         $noteUpdated = $this->noteRepository->findById($request['id']);
 
-        return $noteUpdated;
+        return [
+            'id' => $request['id'],
+            'title' =>$noteUpdated->getTitle(),
+            'content' =>$noteUpdated->getContent(),
+        ];
     }
 
     private function verifyTitleAlreadyExists(Note $note, string $new_title): void
@@ -50,24 +54,24 @@ class UpdateNote implements UseCase
         $userNotes = $this->noteRepository->findAllNotesFrom($note->getUser()->getEmail());
 
         array_filter($userNotes, function($note) use ($new_title){
-            if($note->getTitle() == $new_title) {
-                throw new DomainException($note->getTitle());
+            if($note['title'] == $new_title) {
+                throw new DomainException('Title already exists: ' . $note['title']);
             }
         });
     }
 
-    private function shouldChangeTitle(string $oldTitle, string $newTitle): bool
+    private function shouldChangeTitle(string $oldTitle, ?string $newTitle): bool
     {
         $title = ($oldTitle != $newTitle) ? true : false;
-        $title = empty($newTitle) ? false : true;
+        $title = is_null($newTitle) ? false : true;
 
         return $title;
     }
 
-    private function shouldChangeContent(string $oldContent, string $newContent): bool
+    private function shouldChangeContent(string $oldContent, ?string $newContent): bool
     {
         $content = ($oldContent != $newContent) ? true : false;
-        $content = empty($newContent) ? false : true;
+        $content = is_null($newContent) ? false : true;
 
         return $content;
     }

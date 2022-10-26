@@ -12,7 +12,7 @@ class UpdateNoteOperation implements ControllerOperation
     use HttpHelper;
 
     private $useCase;
-    private $requiredParams = ['id', 'email'];
+    public $requiredParams = ['id', 'email'];
 
     public function __construct(UseCase $useCase)
     {
@@ -22,11 +22,14 @@ class UpdateNoteOperation implements ControllerOperation
     public function specificOp($request)
     {
         try {
-            $updateParams = ['title', 'content'];
-            $missingParams = WebController::getMissingParams($request, $updateParams);
+            $missingParams = WebController::getMissingParams($request, $this->requiredParams);
 
             if(!empty($missingParams)) {
-                return $this->badRequest($missingParams);
+                $fields = '';
+                foreach($missingParams as $params) {
+                    $fields .= "$params ";
+                }
+                return $this->badRequest("Invalid fields: $fields");
             }
     
             $response = $this->useCase->perform($request);

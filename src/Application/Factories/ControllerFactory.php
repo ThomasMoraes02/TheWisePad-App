@@ -5,11 +5,13 @@ use TheWisePad\Application\Authentication\Authentication;
 use TheWisePad\Application\CreateNoteOperation;
 use TheWisePad\Application\LoadNoteOperation;
 use TheWisePad\Application\SignUpOperation;
+use TheWisePad\Application\UpdateNoteOperation;
 use TheWisePad\Application\UseCases\Authentication\CustomAuthentication;
 use TheWisePad\Application\UseCases\CreateNote;
 use TheWisePad\Application\UseCases\LoadNote;
 use TheWisePad\Application\UseCases\SignIn;
 use TheWisePad\Application\UseCases\SignUp;
+use TheWisePad\Application\UseCases\UpdateNote;
 use TheWisePad\Application\Web\WebController;
 use TheWisePad\Infraestructure\Note\NoteRepositoryMemory;
 use TheWisePad\Infraestructure\Note\NoteRepositoryPdo;
@@ -85,6 +87,17 @@ class ControllerFactory
 
         $useCase = new LoadNote($noteRepository);
         $controller = new WebController(new LoadNoteOperation($useCase));
+
+        return $controller;
+    }
+
+    public static function makeUpdateNoteController()
+    {
+        $userRepository = self::makeUserRepository();
+        $noteRepository = self::makeNoteRepository();
+
+        $useCase = new UpdateNote($noteRepository, $userRepository);
+        $controller = new WebController(new UpdateNoteOperation($useCase));
 
         return $controller;
     }

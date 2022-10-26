@@ -21,7 +21,7 @@ class UserRepositoryPdo implements UserRepository
 
     public function addUser(User $user): void
     {
-        $query = "INSERT INTO user VALUES (:name, :email, :password)";
+        $query = "INSERT INTO user (name, email, password) VALUES (:name, :email, :password)";
         $stmt = $this->pdo->prepare($query);
 
         $stmt->bindParam(":name", $user->getName());

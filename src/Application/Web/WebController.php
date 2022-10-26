@@ -1,7 +1,6 @@
 <?php 
 namespace TheWisePad\Application\Web;
 
-use Error;
 use TheWisePad\Application\Web\HttpHelper;
 use TheWisePad\Application\Web\ControllerOperation;
 use Throwable;
@@ -20,11 +19,7 @@ class WebController
     public function handle($request)
     {
         try {
-            $missingParams = WebController::getMissingParams($request, $this->controllerOp->requiredParams);
-
-            if(!empty($missingParams)) {
-                return $this->badRequest($missingParams);
-            }
+            WebController::getMissingParams($request, $this->controllerOp->requiredParams);
 
             return $this->controllerOp->specificOp($request);
 
