@@ -28,6 +28,6 @@ $tableNote = "CREATE TABLE note (
 $pdo->exec($tableUser);
 $pdo->exec($tableNote);
 
-$user = new User("Thomas Moraes", new Email("thomas@gmail.com"), new PasswordArgonII("123456"));
+$user = new User("Usuario", new Email("usuario@gmail.com"), new PasswordArgonII("123456"));
 $userRepositoryPdo = new UserRepositoryPdo();
 $userRepositoryPdo->addUser($user);
