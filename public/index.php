@@ -16,7 +16,7 @@ $app = AppFactory::create();
 
 $app->setBasePath(BASE_PATH);
 
-// $app->addErrorMiddleware(true, true, true);
+// $app->addErrorMiddleware(true, true, true); 
 
 $app->post("/signup", new MakeSignUpController);
 
