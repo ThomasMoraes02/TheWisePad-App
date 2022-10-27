@@ -31,7 +31,7 @@ class UpdateNoteOperation implements ControllerOperation
                 }
                 return $this->badRequest("Invalid fields: $fields");
             }
-    
+
             $response = $this->useCase->perform($request);
             return $this->ok($response);
 
