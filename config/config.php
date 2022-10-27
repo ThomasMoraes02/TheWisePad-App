@@ -19,7 +19,7 @@ define("JWT_SECRET_TOKEN", "token-jwt-thewisedev");
 define("JWT_EXPIRATION_TOKEN", 1);
 
 // Config Database
-define("DB_DRIVER", "mysql");
+define("DB_DRIVER", "sqlite");
 
 define("DB_HOST", "localhost");
 
@@ -27,4 +27,4 @@ define("DB_DATABASE", "thewisedev");
 
 define("DB_USER", "root");
 
-define("DB_PASSWORD", "123456");
+define("DB_PASSWORD", "sua-senha");

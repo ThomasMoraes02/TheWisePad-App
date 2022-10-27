@@ -31,5 +31,3 @@ $pdo->exec($tableNote);
 $user = new User("Thomas Moraes", new Email("thomas@gmail.com"), new PasswordArgonII("123456"));
 $userRepositoryPdo = new UserRepositoryPdo();
 $userRepositoryPdo->addUser($user);
-
-// print_r($user);

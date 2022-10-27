@@ -8,20 +8,25 @@ class ConnectionPdo
 {
     protected $pdo;
 
-    public function getConnection($params = null)
+    public function getConnection()
     {
-        if(is_null($params)) {
-            // Connection Mysql
-        }
-
-        $dir = __DIR__ . "/../../database.sqlite";
         try {
-            $this->pdo = new PDO("sqlite:" . $dir);
+            $this->pdo = $this->generateInstancePdo();
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
 
         return $this->pdo;
+    }
+
+    public function generateInstancePdo(): PDO
+    {
+        if(DB_DRIVER == "mysql") {
+            return new PDO(DB_DRIVER.': host='.DB_HOST.'; dbname='.DB_DATABASE, DB_USER, DB_PASSWORD);
+        }
+
+        $dir = __DIR__ . "/../../database/database.sqlite";
+        return new PDO("sqlite:" . $dir);
     }
 }
