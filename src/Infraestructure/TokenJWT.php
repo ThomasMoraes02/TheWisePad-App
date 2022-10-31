@@ -54,7 +54,7 @@ class TokenJWT implements TokenManager
 
         $interval = $expiresToken->diff($now);
 
-        if($signature != $valid && $payloadDecoded->iss != ENCODER && $interval->days > 5) {
+        if(($signature != $valid) || ($payloadDecoded->iss != JWT_SECRET_TOKEN) || ($interval->days > JWT_EXPIRATION_TOKEN)) {
             return false;
         }
         return true;

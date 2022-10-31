@@ -22,4 +22,15 @@ class TokenJWTTest extends TestCase
 
         $this->assertTrue($tokenVerify);
     }
+
+    public function test_access_token_expires()
+    {
+        $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b2tlbi1qd3QtdGhld2lzZWRldiIsImV4cCI6MTY2NjkwOTg5MywibmFtZSI6IkNhaXF1ZSBNb3JhZXMiLCJlbWFpbCI6ImNhaXF1ZUBnbWFpbC5jb20ifQ==.AlrSkYHS+GDdWy7tvNZbIza1JVOx4jBbaEhoanzRntQ=";
+
+        $tokenJwt = new TokenJWT;
+
+        $tokenVerify = $tokenJwt->verify($token);
+
+        $this->assertFalse($tokenVerify);
+    }
 }
