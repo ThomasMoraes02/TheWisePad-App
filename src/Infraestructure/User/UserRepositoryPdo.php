@@ -2,12 +2,11 @@
 namespace TheWisePad\Infraestructure\User;
 
 use PDO;
-use TheWisePad\Application\Factories\ControllerFactory;
 use TheWisePad\Domain\Email;
 use TheWisePad\Domain\Exceptions\UserNotFound;
 use TheWisePad\Domain\User\User;
 use TheWisePad\Domain\User\UserRepository;
-use TheWisePad\Infraestructure\ConnectionPdo;
+use TheWisePad\Infraestructure\ConnectionManager;
 
 class UserRepositoryPdo implements UserRepository
 {
@@ -15,8 +14,7 @@ class UserRepositoryPdo implements UserRepository
 
     public function __construct()
     {
-        $pdo = new ConnectionPdo();
-        $this->pdo = $pdo->getConnection();
+        $this->pdo = ConnectionManager::connect();
     }
 
     public function addUser(User $user): void

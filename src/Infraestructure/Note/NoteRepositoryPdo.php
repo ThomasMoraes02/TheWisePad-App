@@ -5,9 +5,8 @@ use PDO;
 use TheWisePad\Domain\Email;
 use TheWisePad\Domain\Note\Note;
 use TheWisePad\Domain\Note\NoteRepository;
-use TheWisePad\Infraestructure\ConnectionPdo;
 use TheWisePad\Domain\Exceptions\NoteNotFound;
-use TheWisePad\Infraestructure\User\UserRepositoryPdo;
+use TheWisePad\Infraestructure\ConnectionManager;
 
 class NoteRepositoryPdo implements NoteRepository
 {
@@ -15,8 +14,7 @@ class NoteRepositoryPdo implements NoteRepository
 
     public function __construct()
     {
-        $pdo = new ConnectionPdo();
-        $this->pdo = $pdo->getConnection();
+        $this->pdo = ConnectionManager::connect();
     }
 
     public function addNote(Note $note): Note
