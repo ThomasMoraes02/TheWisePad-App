@@ -21,10 +21,10 @@ define("JWT_EXPIRATION_TOKEN", 1);
 // Config Database
 define("DB_DRIVER", "sqlite"); //mysql
 
-// define("DB_HOST", "localhost");
+define("DB_HOST", "localhost");
 
-// define("DB_DATABASE", "thewisedev");
+define("DB_DATABASE", "thewisedev");
 
-// define("DB_USER", "root");
+define("DB_USER", "root");
 
-// define("DB_PASSWORD", "sua-senha");
+define("DB_PASSWORD", "sua-senha");

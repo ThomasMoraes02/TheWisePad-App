@@ -4,12 +4,18 @@
     "autoload": {
         "psr-4": {
             "TheWisePad\\": "src/"
-        }
+        },
+        "files": [
+            "config/config.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "TheWisePad\\Test\\": "test/"
-        }
+        },
+        "files": [
+            "config/config.php"
+        ]
     },
     "authors": [
         {
