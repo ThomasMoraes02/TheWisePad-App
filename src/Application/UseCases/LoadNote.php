@@ -15,7 +15,10 @@ class LoadNote implements UseCase
 
     public function perform(array $request)
     {
-        $notes = $this->noteRepository->findAllNotesFrom(new Email($request['email']));
+        $request['page'] = (isset($request['page'])) ? $request['page'] : 0;
+        $request['per_page'] = (isset($request['per_page'])) ? $request['per_page'] : 0;
+
+        $notes = $this->noteRepository->findAllNotesFrom(new Email($request['email']), $request['page'], $request['per_page']);
 
         if(empty($notes)) {
             return ['Notes not found'];

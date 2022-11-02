@@ -25,6 +25,11 @@ class MakeLoadNoteController
     public function __invoke(Request $request, Response $response, array $args)
     {
         $payload['email'] = $args['email'];
+
+        $params = $request->getQueryParams();
+        $payload['page'] = (isset($params['page'])) ? $params['page'] : 0;
+        $payload['per_page'] = (isset($params['per_page'])) ? $params['per_page'] : 0;
+
         $responseController = $this->controller->handle($payload);
 
         return $this->adapteRoute($response, $responseController);

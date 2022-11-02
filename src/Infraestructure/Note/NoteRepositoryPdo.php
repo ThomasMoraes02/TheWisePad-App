@@ -75,7 +75,7 @@ class NoteRepositoryPdo implements NoteRepository
         $stmt->execute();
     }
 
-    public function findAllNotesFrom(Email $email): array
+    public function findAllNotesFrom(Email $email, int $page = 0, int $per_page = 0): array
     {
         $query = "SELECT * FROM note WHERE email = '$email'";
         $notes = $this->pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);

@@ -39,7 +39,7 @@ class NoteRepositoryMemory implements NoteRepository
         unset($this->notes[$id]);
     }
 
-    public function findAllNotesFrom(Email $email): array
+    public function findAllNotesFrom(Email $email, int $page = 0, int $per_page = 0): array
     {
         $findNotes = [];
         $findNotes = array_filter($this->notes, function($note) use ($email) {

@@ -4,6 +4,7 @@ namespace TheWisePad\Infraestructure\Note;
 use TheWisePad\Domain\Email;
 use TheWisePad\Domain\Note\Note;
 use MongoDB\Operation\FindOneAndUpdate;
+use SebastianBergmann\Environment\Console;
 use TheWisePad\Domain\Note\NoteRepository;
 use TheWisePad\Domain\Exceptions\NoteNotFound;
 use TheWisePad\Infraestructure\ConnectionManager;
@@ -67,10 +68,18 @@ class NoteRepositoryMongodb implements NoteRepository
         $this->mongo->deleteOne(["_id" => intval($id)]);
     }
 
-    public function findAllNotesFrom(Email $email): array
+    public function findAllNotesFrom(Email $email, int $page = 0, int $per_page = 0): array
     {
-        $notes = $this->mongo->find(["email" => strval($email)])->toArray();
-        return $notes;
+        $skip = ($page - 1) * $per_page;
+        $skip = ($skip < 0) ? 0 : $skip;
+
+        $options = [
+            'skip' => $skip,
+            'limit' => $per_page
+        ];
+
+        $notes = $this->mongo->find(["email" => strval($email)], $options)->toArray();
+        return $notes;        
     }
     
     /**

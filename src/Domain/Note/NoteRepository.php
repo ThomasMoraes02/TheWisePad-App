@@ -16,5 +16,5 @@ interface NoteRepository
 
     public function removeNote(string $id): void;
 
-    public function findAllNotesFrom(Email $email): array;
+    public function findAllNotesFrom(Email $email, int $page = 0, int $per_page = 0): array;
 }
