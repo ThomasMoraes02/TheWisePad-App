@@ -46,8 +46,8 @@ abstract class ConnectionManager
     private static function connectMongodb()
     {
         try {
-            $instance = new Client();
-            $instance->selectDatabase(DB_DATABASE);
+            $client = new Client();
+            $instance = $client->selectDatabase(DB_DATABASE);
             self::$instance = $instance;
         } catch(Throwable $e) {
             echo $e->getMessage();

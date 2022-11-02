@@ -7,6 +7,8 @@ use TheWisePad\Domain\Note\Note;
 use TheWisePad\Domain\Note\NoteRepository;
 use TheWisePad\Domain\User\UserRepository;
 
+use function PHPSTORM_META\type;
+
 class UpdateNote implements UseCase
 {
     private $noteRepository;
@@ -54,7 +56,7 @@ class UpdateNote implements UseCase
         $userNotes = $this->noteRepository->findAllNotesFrom($note->getUser()->getEmail());
 
         array_filter($userNotes, function($note) use ($new_title){
-            $getTitle = (is_object($note)) ? $note->getTitle() : $note['title'];
+            $getTitle = $this->getType($note);
             if($getTitle == $new_title) {
                 throw new DomainException('Title already exists: ' . $note['title']);
             }
@@ -75,5 +77,11 @@ class UpdateNote implements UseCase
         $content = is_null($newContent) ? false : true;
 
         return $content;
+    }
+
+    private function getType($note)
+    {
+        if(DB_DRIVER == "mongodb") return $note['title'];
+        return  (is_object($note)) ? $note->getTitle() : $note['title'];
     }
 }
