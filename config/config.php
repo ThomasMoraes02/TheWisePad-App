@@ -21,7 +21,7 @@ define("JWT_SECRET_TOKEN", "token-jwt-thewisedev");
 define("JWT_EXPIRATION_TOKEN", 1);
 
 // Config Database
-define("DB_DRIVER", "mongodb"); //mysql
+define("DB_DRIVER", "mongodb");
 
 define("DB_HOST", "localhost");
 

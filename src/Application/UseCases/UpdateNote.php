@@ -3,11 +3,12 @@ namespace TheWisePad\Application\UseCases;
 
 use DomainException;
 use TheWisePad\Domain\Email;
+use MongoDB\Model\BSONDocument;
+use function PHPSTORM_META\type;
 use TheWisePad\Domain\Note\Note;
+
 use TheWisePad\Domain\Note\NoteRepository;
 use TheWisePad\Domain\User\UserRepository;
-
-use function PHPSTORM_META\type;
 
 class UpdateNote implements UseCase
 {
@@ -81,7 +82,9 @@ class UpdateNote implements UseCase
 
     private function getType($note)
     {
-        if(DB_DRIVER == "mongodb") return $note['title'];
-        return  (is_object($note)) ? $note->getTitle() : $note['title'];
+        if($note instanceof BSONDocument) {
+            return $note['title'];
+        }
+        return (is_object($note)) ? $note->getTitle() : $note['title'];
     }
 }

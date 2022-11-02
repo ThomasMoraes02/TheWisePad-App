@@ -36,9 +36,10 @@ class CreateNote implements UseCase
         }
 
         $this->noteRepository->addNote($newNote);
-        
+
         return [
-            'Note created'
+            'title' => $newNote->getTitle(),
+            'content' =>$newNote->getContent(),
         ];
     }
 }
