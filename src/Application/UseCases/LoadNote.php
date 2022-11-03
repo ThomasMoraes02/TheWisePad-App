@@ -17,6 +17,7 @@ class LoadNote implements UseCase
     {
         $request['page'] = (isset($request['page'])) ? $request['page'] : 0;
         $request['per_page'] = (isset($request['per_page'])) ? $request['per_page'] : 0;
+        $request['id'] = (isset($request['id'])) ? $request['id'] : '';
 
         if($request['id'] != '') {
             $note = $this->noteRepository->findById($request['id']);
