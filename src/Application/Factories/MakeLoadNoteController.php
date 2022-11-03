@@ -25,11 +25,11 @@ class MakeLoadNoteController
     public function __invoke(Request $request, Response $response, array $args)
     {
         $payload['email'] = $args['email'];
-        $payload['id'] = !empty($args['id']) ? $args['id'] : '';
 
         $params = $request->getQueryParams();
         $payload['page'] = (isset($params['page'])) ? $params['page'] : 0;
         $payload['per_page'] = (isset($params['per_page'])) ? $params['per_page'] : 0;
+        $payload['id'] = (isset($params['id'])) ? $params['id'] : 0;
 
         $responseController = $this->controller->handle($payload);
 

@@ -26,8 +26,6 @@ $app->group('/', function(RouteCollectorProxy $group) {
 
     $group->get('notes/{email}', new MakeLoadNoteController);
 
-    $group->get('notes/{email}/{id}', new MakeLoadNoteController);
-
     $group->post('notes', new MakeCreateNoteController);
 
     $group->put('notes/{id}', new MakeUpdateNoteController);
