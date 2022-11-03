@@ -25,6 +25,7 @@ class MakeLoadNoteController
     public function __invoke(Request $request, Response $response, array $args)
     {
         $payload['email'] = $args['email'];
+        $payload['id'] = !empty($args['id']) ? $args['id'] : '';
 
         $params = $request->getQueryParams();
         $payload['page'] = (isset($params['page'])) ? $params['page'] : 0;
