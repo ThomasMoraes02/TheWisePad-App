@@ -7,7 +7,7 @@ O projeto foi desenvolvido utilizando o TDD (Test Driven Development) para reali
 # Tecnologia
 
 Foram utilizados as seguintes tecnologias para desenvolvimento:
-- PHP 7.2^
+- PHP 7.4^
 - Composer - Gerenciador de dependências 
 - PHPUnit - Testes
 - Slim Framework - Criação da Api
